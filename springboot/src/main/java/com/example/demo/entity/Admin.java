@@ -1,18 +1,18 @@
 package com.example.demo.entity;
 
+
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.sql.Blob;
-import java.util.Date;
-
-@TableName("track")
+@TableName("admin")
 @Data
-public class Track {
+public class Admin {
     @TableId(type = IdType.AUTO)
     private Integer id;
-    private Blob track;
-    private Date time;
+    private String username;
+    private String password;
+
 }
+

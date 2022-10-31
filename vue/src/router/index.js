@@ -58,7 +58,7 @@ const routes = [
         //轨迹表单
         path: 'track',
         name: 'Track',
-        component: () => import ("@/views/admin/adminTrack"),
+        component: () => import ("@/views/admin/adminTrajectory"),
       }
     ]
   },

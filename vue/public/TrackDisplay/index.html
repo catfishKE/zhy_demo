@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>外卖员轨迹展示</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <style>
+        body,
+        html,
+        #container {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            font-family: "微软雅黑";
+        }
+        ul li {
+            list-style: none;
+        }
+        .drawing-panel {
+            z-index: 999;
+            position: fixed;
+            bottom: 3.5rem;
+            margin-left: 3rem;
+            padding: 1rem 1rem;
+            border-radius: .25rem;
+            background-color: #fff;
+            box-shadow: 0 2px 6px 0 rgba(27, 142, 236, 0.5);
+        }
+        .btn {
+            width: 90px;
+            height: 30px;
+            float: left;
+            background-color: #fff;
+            color: rgba(27, 142, 236, 1);
+            font-size: 14px;
+            border:1px solid rgba(27, 142, 236, 1);
+            border-radius: 5px;
+            margin: 0 5px;
+            text-align: center;
+            line-height: 30px;
+        }
+        .btn:hover {
+            background-color: rgba(27, 142, 236, 0.8);
+            color: #fff;
+        }
+    </style>
+    <script src="//mapopen.bj.bcebos.com/github/BMapGLLib/TrackAnimation/src/TrackAnimation.min.js"></script>
+    <script src="//api.map.baidu.com/api?type=webgl&v=1.0&ak=pUTY84IUBTI4R4e0qa58BiVnWdKIDe9t"></script>
+</head>
+<body>
+<div id="container"></div>
+<ul class="drawing-panel" style="z-index: 99;">
+    <li class = "btn" onclick = "pauseAni()">暂停</li>
+    <li class = "btn" onclick = "continueAni()">继续</li>
+</ul>
+</body>
+</html>
+
+<script>
+    var bmap = new BMapGL.Map("container");
+    bmap.centerAndZoom(new BMapGL.Point(108.881104,34.150915), 20);
+    bmap.enableScrollWheelZoom(true); //开启鼠标滚轮 地图可以进行放大 缩小
+    bmap.addControl(new BMapGL.ScaleControl()); // 添加比例尺控件 左下角显示
+    bmap.addControl(new BMapGL.ZoomControl());// 添加缩放控件 右下角显示
+    bmap.addControl(new BMapGL.CityListControl());  // 添加城市列表控件 左上角
+    bmap.addControl(new BMapGL.MapTypeControl());// 地图类型 右上角显示
+
+    var path = [{
+        'lng': 108.88667413363476,
+        'lat': 34.15181091262369
+    }, {
+        'lng': 108.88595222640281,
+        'lat': 34.15183273824585
+    }, {
+        'lng': 108.8854272029614,
+        'lat': 34.15180545621726
+    }, {
+        'lng': 108.8854665797195,
+        'lat': 34.15130892174304
+    }, {
+        'lng': 108.88596535198884,
+        'lat': 34.151314378181844
+    }, {
+        'lng': 108.8854993936846,
+        'lat': 34.1513198346203
+    }, {
+        'lng': 108.88540095178934,
+        'lat': 34.15105792517349
+    },{
+        'lng': 108.8851085225044,
+        'lat': 34.15071928085034
+    },{
+        'lng': 108.88464632272051,
+        'lat': 34.15033499500268
+    },{
+        'lng': 108.88402099360114,
+        'lat': 34.150206899328
+    },{
+        'lng': 108.88353160559468,
+        'lat': 34.150131548839525
+    },{
+        'lng': 108.88310565677425,
+        'lat': 34.15011647873369
+    },{
+        'lng': 108.88324752614729,
+        'lat': 34.149592136018256
+    },{
+        'lng': 108.8832384469002,
+        'lat': 34.14929018248486
+    },{
+        'lng': 108.88326149671157,
+        'lat': 34.14905689292567
+    },{
+        'lng': 108.88258216301595,
+        'lat': 34.14906265646616
+    },{
+        'lng': 108.88218704035624,
+        'lat': 34.14905689292567
+    },{
+        'lng': 108.88211425460314,
+        'lat': 34.149359478264586
+    },{
+        'lng': 108.88143145491927,
+        'lat': 34.149379650581615
+    },{
+        'lng': 108.88179538368479,
+        'lat': 34.149373887062964
+    },{
+        'lng': 108.88213158454434,
+        'lat': 34.149376768822336
+    },];
+    var point = [];
+    for (var i = 0; i < path.length; i++) {
+        point.push(new BMapGL.Point(path[i].lng, path[i].lat));
+    }
+    var pl = new BMapGL.Polyline(point);
+    setTimeout('start()', 3000);
+    trackAni = new BMapGLLib.TrackAnimation(bmap, pl, {
+        overallView: true,
+        tilt: 30,
+        duration: 20000,
+        delay: 300
+    });
+    function start () {
+        trackAni.start();
+    }
+    function pauseAni () {
+        trackAni.pause();
+    }
+    function continueAni () {
+        trackAni.continue();
+    }
+</script>

@@ -3,6 +3,7 @@
     <div style="width: 400px; margin: 150px auto">
       <div style="color: #cccccc; font-size: 30px; text-align: center; padding: 50px">欢迎登录</div>
       <el-form :model="form" size="normal" ref="form" :rules="rules">
+
         <el-form-item prop="username">
           <el-input
               v-model="form.username"
@@ -12,6 +13,7 @@
               :prefix-icon="UserFilled"
           />
         </el-form-item>
+
         <el-form-item prop="password">
           <el-input
               v-model="form.password"
@@ -41,23 +43,28 @@ export default {
   name: "adminLogin",
   data(){
     return{
-      form:{}
+      form:{},
+      rules :{
+        username: [
+          { required: true, message: '输入用户名', trigger: 'blur' },
+        ],
+        password: [
+          { required: true, message: '输入密码', trigger: 'blur' },
+        ],
+      },
     }
   },
   methods:{
-    login(){
-      request.post("/user/login",this.form).then(res => {
-        if (res.code === '0') {
-          this.$message({
-            type: "success",
-            message: "登录成功"
-          })
-          //登录成功后页面跳转,跳转到主页
-          this.$router.push("/")
-        } else {
-          this.$message({
-            type: "error",
-            message: res.msg
+    login() {
+      this.$refs['form'].validate( (valid)=> {
+        if (valid){
+          request.post("/admin/login",this.form).then(res => {
+            if (res.code === '0') {
+              this.$message({type: "success", message: "登录成功"})
+              this.$router.push("/admin") //登录跳转
+            } else{
+              this.$message({type: "error", message:"用户名或密码错误"})
+            }
           })
         }
       })

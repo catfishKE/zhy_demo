@@ -15,11 +15,27 @@
     </div>
 
 
-    <el-table :data="tableData" border style="width: 100%" stripe>
+<!--    <el-table :data="tableData" border style="width: 100%" stripe>-->
 
-      <el-table-column prop="id" label="id" sortable/>
-      <el-table-column prop="track" label="轨迹" />
-      <el-table-column prop="time" label="时间" />
+    <el-table
+        :data="tableData"
+        border
+        stripe
+        style="width: 100%"
+        :row-class-name="tableRowClassName">
+
+      <el-table-column prop="id" label="轨迹编号" sortable/>
+      <el-table-column prop="idTakeawaymember" label="外卖员编号" />
+      <el-table-column prop="trajectory" label="轨迹" />
+      <el-table-column label="显示轨迹">
+        <template #default="scope">
+          <el-button type="text" size="mini" @click="trackDisplay">
+            显示
+          </el-button>
+<!--          <embed :src="src" width="100%" height="100%" />-->
+        </template>
+      </el-table-column>
+      <el-table-column prop="createTime" label="时间" />
 
       <el-table-column fixed="right" label="Operations" width="120">
         <template #default="scope">
@@ -52,11 +68,17 @@
       <el-dialog
           v-model="dialogVisible" title="Tips" width="30%">
         <el-form :model="form" label-width="120px">
-          <el-form-item label="轨迹">
-            <el-input v-model="form.track" style="width: 80%" />
+
+          <el-form-item label="外卖员编号">
+            <el-input v-model="form.idTakeawaymember" style="width: 80%" />
           </el-form-item>
+
+          <el-form-item label="轨迹">
+            <el-input v-model="form.trajectory" style="width: 80%" />
+          </el-form-item>
+
           <el-form-item label="时间">
-            <el-input v-model="form.time" style="width: 80%" />
+            <el-input v-model="form.createTime" style="width: 80%" />
           </el-form-item>
 
         </el-form>
@@ -80,12 +102,13 @@
 import request from "@/utils/request";
 
 export default {
-  name: 'Track',
+  name: 'adminTrajectory',
   components: {
 
   },
   data(){
     return{
+      src:'/TrackDisplay',
       search:'',
       currentPage:1,
       total:0,
@@ -102,7 +125,7 @@ export default {
 
   methods:{
     load(){
-      request.get("/track", {
+      request.get("/trajectory", {
         params: {
           pageNum: this.currentPage,
           pageSize: this.pageSize,
@@ -120,7 +143,7 @@ export default {
     },
     save(){
       if (this.form.id) {
-        request.put("/track", this.form).then(res => {
+        request.put("/trajectory", this.form).then(res => {
           if (res.code == '0') {
             this.$message({
               type: "success",
@@ -134,7 +157,7 @@ export default {
           }
         })
       } else {
-        request.post("/track", this.form).then(res => {
+        request.post("/trajectory", this.form).then(res => {
           if (res.code == '0') {
             this.$message({
               type: "success",
@@ -166,7 +189,7 @@ export default {
     },
     handleDelete(id) {
       console.log(id);
-      request.delete("/track/" + id).then(res => {
+      request.delete("/trajectory/" + id).then(res => {
         if (res.code == '0') {
           this.$message({
             type: "success",
@@ -180,6 +203,9 @@ export default {
         }
       })
       this.load();
+    },
+    trackDisplay(){
+      window.open("/TrackDisplay", "_blank");
     }
   }
 }

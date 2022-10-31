@@ -1,12 +1,14 @@
 package com.example.demo.controller;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.common.Result;
 import com.example.demo.entity.TakeAwayMembers;
 import com.example.demo.mapper.TakeAwayMembersMapper;
+import com.example.demo.mapper.UserMapper;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -19,7 +21,20 @@ public class TakeAwayMembersController {
     TakeAwayMembersMapper takeAwayMembersMapper;
     //新增
 
+    @PostMapping("/onLogin")
+    public String func(@RequestBody JSONObject req){
+        return req.getStr("code");
+    }
 
+    @PostMapping("/register")
+    public String register(@RequestBody JSONObject req){
+        TakeAwayMembers newMember = new TakeAwayMembers();
+        newMember.setName(req.getStr("name"));
+        newMember.setIdNumber(req.getStr("IdNumber"));
+        newMember.setPhoneNumber(req.getStr("phoneNumber"));
+        takeAwayMembersMapper.insert(newMember);
+        return "returned";
+    }
 
     @PostMapping
     public Result <?> save(@RequestBody TakeAwayMembers takeAwayMembers) {
